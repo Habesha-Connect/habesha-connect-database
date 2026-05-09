@@ -1397,20 +1397,20 @@ $$ LANGUAGE plpgsql;
 -- Create application role
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'habeshafresh_app') THEN
-        CREATE ROLE habeshafresh_app WITH LOGIN PASSWORD 'change_me_in_production';
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'habesha_connect_app') THEN
+        CREATE ROLE habesha_connect_app WITH LOGIN PASSWORD 'change_me_in_production';
     END IF;
 END
 $$;
 
 -- Grant permissions
-GRANT CONNECT ON DATABASE habeshafresh TO habeshafresh_app;
-GRANT USAGE ON SCHEMA public TO habeshafresh_app;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO habeshafresh_app;
-GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO habeshafresh_app;
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO habeshafresh_app;
+GRANT CONNECT ON DATABASE habesha_connect TO habesha_connect_app;
+GRANT USAGE ON SCHEMA public TO habesha_connect_app;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO habesha_connect_app;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO habesha_connect_app;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO habesha_connect_app;
 
 -- ============================================
 -- COMPLETE
 -- ============================================
-COMMENT ON DATABASE habeshafresh IS 'Habesha Fresh Platform Database - v2.0';
+COMMENT ON DATABASE habesha_connect IS 'Habesha Fresh Platform Database - v2.0';
