@@ -1,0 +1,35 @@
+# Environment files
+.env
+.env.local
+.env.production
+
+# Database dumps
+*.sql.gz
+*.dump
+*.backup
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# Docker volumes
+pgdata/
+
+# Backup directory
+backups/*
+!backups/.gitkeep

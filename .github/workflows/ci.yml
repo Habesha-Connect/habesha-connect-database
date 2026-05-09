@@ -1,0 +1,62 @@
+name: Database CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [develop]
+
+jobs:
+  validate-schema:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: habesha_connect_test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+      
+      - name: Test schema deployment
+        run: |
+          PGPASSWORD=test_password psql \
+            -h localhost \
+            -U test_user \
+            -d habesha_connect_test \
+            -f schemas/habesha-connect-v2.0.sql
+      
+      - name: Verify schema objects
+        run: |
+          PGPASSWORD=test_password psql \
+            -h localhost \
+            -U test_user \
+            -d habesha_connect_test \
+            -c "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public';"
+      
+      - name: Check for SQL syntax errors
+        run: |
+          for file in migrations/*.sql; do
+            echo "Validating: $file"
+            PGPASSWORD=test_password psql \
+              -h localhost \
+              -U test_user \
+              -d habesha_connect_test \
+              -f "$file" \
+              --echo-errors \
+              --set ON_ERROR_STOP=1
+          done

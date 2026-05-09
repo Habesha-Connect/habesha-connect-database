@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: habesha-connect-db
+    environment:
+      POSTGRES_DB: habesha_connect
+      POSTGRES_USER: habesha_connect_app
+      POSTGRES_PASSWORD: dev_password_change_in_prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d/migrations
+      - ./schemas:/schemas
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U habesha_connect_app -d habesha_connect"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
